@@ -89,9 +89,16 @@ void DisplayInstance::drawCalibrationFrame(int8_t adjustTop, int8_t adjustBottom
                   adjustTop, adjustBottom, adjustLeft, adjustRight);
     
     // Draw diagonal from origin to display center (identifies origin)
-    int displayCenterX = config.width / 2;
-    int displayCenterY = config.height / 2;
+    // Use runtime TFT dimensions instead of config to avoid coordinate mismatches
+    int displayCenterX = tft->width() / 2;
+    int displayCenterY = tft->height() / 2;
+    
+    // Draw thicker diagonal line to prevent single-pixel gaps
     tft->drawLine(0, 0, displayCenterX, displayCenterY, ST77XX_YELLOW);
+    // Add parallel line for thickness (offset by 1 pixel if within bounds)
+    if (displayCenterX > 0 && displayCenterY > 0) {
+        tft->drawLine(1, 0, displayCenterX, displayCenterY - 1, ST77XX_YELLOW);
+    }
     
     // Mark origin
     tft->drawPixel(0, 0, ST77XX_WHITE);

@@ -338,7 +338,12 @@ void drawOriginToCenterLine() {
   int centerY = tft.height() / 2;
   
   // Draw line from origin (0,0) to center
+  // Use thicker line to prevent single-pixel gaps
   tft.drawLine(0, 0, centerX, centerY, ST77XX_YELLOW);
+  // Add parallel line for thickness (offset by 1 pixel if within bounds)
+  if (centerX > 0 && centerY > 0) {
+      tft.drawLine(1, 0, centerX, centerY - 1, ST77XX_YELLOW);
+  }
   
   // Draw axes
   tft.drawLine(0, 0, tft.width() - 1, 0, ST77XX_BLUE);    // X-axis
